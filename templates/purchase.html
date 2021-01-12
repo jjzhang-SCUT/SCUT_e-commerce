@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+  <main class="container col-lg-8 mt-3">
+    {% for commodity in info2 %}
+      <div class="px-3 mb-3">
+        <div class="pt-3 d-flex flex-row">
+          <div class="card my-auto mx-2">
+            <img src="/static/picture/{{commodity.commodities_ID}}.jpg" alt="Commodity Picture" width="200" height="200">
+          </div>
+          <ul class="list-group d-flex flex-fill my-auto">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>ID:</span>
+              <span>{{ commodity.commodities_ID }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Name:</span>
+              <span>{{ commodity.name }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Price:</span>
+              <span>${{ commodity.price }}</span>
+            </li>
+          </ul>
+        </div>
+        {% for student in info %}
+          <form>
+            <input class="form-control" id="commodity_id" value="{{commodity.commodities_ID}}" hidden>
+            <div class="form-group ml-2">
+              <p class="my-2">Consignee Name</p>
+              <input type="text" class="form-control" id="consignee" value="{{student.name}}">
+            </div>
+            <div class="form-group ml-2">
+              <p class="my-2">Consignee Telephone</p>
+              <input type="text" class="form-control" id="telephone" value="{{student.telephone}}">
+            </div>
+            <div class="form-group ml-2">
+              <p class="my-2">Consignee Address</p>
+              <input type="text" class="form-control" id="address" value="{{student.dormitory}}">
+            </div>
+            <div class="d-flex form-group mx-auto">
+              <button type="button" class="btn btn-primary my-auto mx-auto" onclick="buy()">Confirm Purchase</button>
+            </div>
+          </form>
+        {% endfor %}
+        <div class="d-flex mx-auto my-2">
+        </div>
+      </div>
+    {% endfor %}
+  <script>
+    function buy(){
+      var commodity_id = $("#commodity_id").val(), consignee = $("#consignee").val();
+      var telephone = $("#telephone").val(), address = $("#address").val();
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: '/home/purchase/',
+        contentType: "application/json",
+        data:JSON.stringify({
+          "data": {
+            "id": commodity_id,
+            "consignee": consignee,
+            "telephone": telephone,
+            "address": address
+          }
+        }),
+        success:function(result){
+          if (result.ret == 0){
+            alert("Success");
+            window.location.href = "/home/order/?view=buyer";
+          }
+          else{
+            alert("Error!");
+          }
+        }
+      })
+    }
+  </script>
+  </main>
+{% endblock %}
+
+

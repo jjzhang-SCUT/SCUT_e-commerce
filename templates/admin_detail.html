@@ -1,0 +1,50 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<main class="container col-lg-8 mt-3">
+    {% for commodity in commodities %}
+      <div class="px-3 mb-3">
+        <div class="pt-3 d-flex flex-row">
+          <div class="card my-auto mx-2">
+            <img src="/static/picture/{{ commodity.commodities_ID }}.jpg" alt="Commodity Picture" width="200" height="200">
+          </div>
+          <ul class="list-group d-flex flex-fill my-auto">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>ID:</span>
+              <span>{{ commodity.commodities_ID }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Name:</span>
+              <span>{{ commodity.name }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Inventory:</span>
+              <span>{{ commodity.inventory }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Seller:</span>
+              <span>{{ commodity.seller_ID }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Price:</span>
+              <span>${{ commodity.price }}</span>
+            </li>
+          </ul>
+        </div>
+        <ul class="list-group my-2 ml-2">
+          <li class="list-group-item">Description</li>
+          <li class="list-group-item">{{ commodity.description }}</li>
+        </ul>
+        <ul class="list-group my-2 ml-2">
+          <li class="list-group-item">Comment</li>
+          {% for comment in comments %}
+            <li class="list-group-item">
+              {% for name, value in comment.items %}
+                {{ value }}
+              {% endfor %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </main>
+{% endblock %}

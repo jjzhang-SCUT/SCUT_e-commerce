@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <main role="main" class="container">
+    {% for s in student %}
+    <div class="p-3 my-3 border rounded shadow-sm">
+      <h4>{{ s.name }}</h4>
+      <p class="text-black-50 my-auto">{{ s.student_ID }}</p>
+    </div>
+    <form class="p-3 border rounded shadow-sm my-auto" method="post" action="{% url 'home/profile' %}">
+      <div class="row border-bottom border-gray">
+        <h5 class="pb-3 mb-0 col-sm-10">Profile</h5>
+      </div>
+      <div class="row p-3 border-bottom border-gray">
+        <label for="sex" class="col-sm-2 col-form-label my-auto">Sex</label>
+        {% if edit == 'true' %}
+          <select name="sex" class="form-control col-sm-9">
+            {% if s.sex == 'male' %}
+              <option selected="selected">male</option>
+              <option>female</option>
+            {% else %}
+              <option>male</option>
+              <option selected="selected">female</option>
+            {% endif %}
+          </select>
+        {% else %}
+          <input type="text" class="form-control col-sm-9" readonly name="college" value="{{ s.sex }}">
+        {% endif %}
+      </div>
+      <div class="row p-3 border-bottom border-gray">
+        <label for="college" class="col-sm-2 col-form-label my-auto">College</label>
+        {% if edit == 'true' %}
+          <input type="text" class="form-control col-sm-9" name="college" value="{{ s.college }}">
+        {% else %}
+          <input type="text" class="form-control col-sm-9" readonly name="college" value="{{ s.college }}">
+        {% endif %}
+      </div>
+      <div class="row p-3 border-bottom border-gray">
+        <label for="major" class="col-sm-2 col-form-label my-auto">Major</label>
+        {% if edit == 'true' %}
+          <input type="text" class="form-control col-sm-9" name="major" value="{{ s.major }}">
+        {% else %}
+          <input type="text" class="form-control col-sm-9" readonly name="major" value="{{ s.major }}">
+        {% endif %}
+      </div>
+      <div class="row p-3 border-bottom border-gray">
+        <label for="dormitory" class="col-sm-2 col-form-label my-auto">Dormitory</label>
+        {% if edit == 'true' %}
+          <input type="text" class="form-control col-sm-9" name="dormitory" value="{{ s.dormitory }}">
+        {% else %}
+          <input type="text" class="form-control col-sm-9" readonly name="dormitory" value="{{ s.dormitory }}">
+        {% endif %}
+      </div>
+      <div class="row p-3 border-bottom border-gray">
+        <label for="telephone" class="col-sm-2 col-form-label my-auto">Telephone</label>
+        {% if edit == 'true' %}
+          <input type="text" class="form-control col-sm-9" name="telephone" value="{{ s.telephone }}">
+        {% else %}
+          <input type="text" class="form-control col-sm-9" readonly name="telephone" value="{{ s.telephone }}">
+        {% endif %}
+      </div>
+      {% if edit == 'true' %}
+        <div class="row p-3 border-bottom border-gray">
+          <label for="password" class="col-sm-2 col-form-label my-auto">Password</label>
+          <input type="password" class="form-control col-sm-9" name="password" value="{{ s.password }}">
+        </div>
+      {% endif %}
+      {% if edit == 'false' %}
+        <div class="d-flex justify-content-center mt-3">
+          <a href="/home/profile/?editing=True" class="btn btn-outline-primary mx-2" type="button">Edit</a>
+          <a class="btn btn-outline-primary mx-2" href="/home/">Back</a>
+        </div>
+      {% else %}
+        <div class="w-100 text-center mt-3">
+          <button type="submit" class="btn btn-outline-primary mx-2">Submit</button>
+          <a href="/home/profile/" class="btn btn-outline-primary mx-2">Cancel</a>
+        </div>
+      {% endif %}
+    </form>
+    {% endfor %}
+  </main>
+{% endblock %}

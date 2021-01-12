@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% for s in student %}
+  <main role="main" class="container">
+    <div class="p-3 my-3 border rounded shadow-sm">
+      <h4>{{ s.name }}</h4>
+      <p class="text-black-50 my-auto">{{ s.student_ID }}</p>
+    </div>
+    <form method="post" action="{% url 'home/profile' %}">
+      <div class="form-group">
+        <label>Sex</label>
+        <select class="form-control" name="sex">
+          {% if s.sex == 'male' %}
+            <option selected="selected">male</option>
+            <option>female</option>
+          {% else %}
+            <option>male</option>
+            <option selected="selected">female</option>
+          {% endif %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>College</label>
+        <input class="form-control" name="college" value="{{ s.college }}">
+      </div>
+      <div class="form-group">
+        <label>Major</label>
+        <input class="form-control" name="major" value="{{ s.major }}">
+      </div>
+      <div class="form-group">
+        <label>Dormitory</label>
+        <input class="form-control" name="dormitory" value="{{ s.dormitory }}">
+      </div>
+      <div class="form-group">
+        <label>Telephone</label>
+        <input class="form-control" name="telephone" value="{{ s.telephone }}">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password">
+      </div>
+      <div class="w-100 text-center">
+        <button type="submit" class="btn btn-outline-primary mr-2">Submit</button>
+        <a href="/home/profile/" class="btn btn-outline-primary ml-2">Cancel</a>
+      </div>
+    </form>
+  </main>
+  {% endfor %}
+{% endblock %}

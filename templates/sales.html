@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+  <main class="container col-lg-8" role="main">
+    <div class="p-3 my-3 border rounded shadow-sm">
+      <div class="d-flex flex-row justify-content-between">
+        <h4 class="p-2"> Selling Commodities </h4>
+        {% if adding != 'true' %}
+          <a href="/home/sales/?adding=true" type="button" class="btn btn-primary mb-3 p-2">New Commodity</a>
+        {% endif %}
+      </div>
+      {% if adding == 'true' %}
+        <div class="px-3 mb-3 border rounded shadow-sm">
+          <div class="row border-bottom border-gray d-flex justify-content-between py-2">
+            <h5 class="my-auto col-sm-6 ">New Commodity</h5>
+            <a href="/home/sales/" type="button" class="btn btn-primary my-auto mr-2">Cancel</a>
+          </div>
+          <form class="mt-3 " action="" method="POST" enctype="multipart/form-data">
+            <div class="d-flex flex-row">
+              <div class="card my-auto mx-2">
+                <img id="cropedBigImg" alt="Haven't Selected Image" width="200" height="200">
+              </div>
+              <div class="d-flex flex-column flex-fill mx-3">
+                <div class="row my-2">
+                  <label class="my-auto col-sm-3">Name:</label>
+                  <input type="text" class="form-control col-sm-9" name="name">
+                </div>
+                <div class="row my-2">
+                  <label class="my-auto col-sm-3">Inventory:</label>
+                  <input type="text" class="form-control col-sm-9" name="inventory">
+                </div>
+                <div class="row my-2">
+                  <label class="my-auto col-sm-3">Price:</label>
+                  <input type="text" class="form-control col-sm-9" name="price">
+                </div>
+                <div class="row my-2">
+                  <label class="my-auto col-sm-3">Picture:</label>
+                  <input id="chooseImage" name="file" type="file" class="form-control-file col-sm-9" accept="image/png, image/jpg, image/jpeg">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-form-label my-auto">Description</label>
+              <textarea class="form-control " rows=2 style="resize:none" name="description"></textarea>
+            </div>
+            <button id="create_btn" class="col-sm-6 btn btn-lg btn-primary btn-block mx-auto mb-3" type="submit" disabled>Create</button>
+          </form>
+        </div>
+      {% endif %}
+      {% for commodity in commodities %}
+        <div class="px-3 mb-3 border rounded shadow-sm">
+          <div class="row border-bottom border-gray d-flex justify-content-between py-2">
+            <h5 class="my-auto col-lg-8 ">CommodityID: {{ commodity.commodities_ID }}</h5>
+            <form action="" method="POST">
+              <input class="form-control" name="signal" value="1" style="display:none;">
+              <input class="form-control" name="id" value="{{commodity.commodities_ID}}" style="display:none;">
+              <button type="submit" class="btn btn-primary my-auto mr-2" onclick="tips()">Withdraw</button>
+            </form>
+          </div>
+          <div class="pt-3 d-flex flex-row">
+            <a class="card my-auto mx-2" href="/home/detail/?id={{ commodity.commodities_ID }}">
+              <img src="/static/picture/{{ commodity.commodities_ID }}.jpg" alt="Commodity Picture" width="200" height="200">
+            </a>
+            <ul class="list-group d-flex flex-fill my-auto">
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Name:</span>
+                <span>{{ commodity.name }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Inventory:</span>
+                <span>{{ commodity.inventory }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Price:</span>
+                <span>${{ commodity.price }}</span>
+              </li>
+            </ul>
+          </div>
+          <ul class="list-group my-2">
+            <li class="list-group-item">Description</li>
+            <li class="list-group-item">{{ commodity.description }}</li>
+          </ul>
+        </div>
+        <script>
+          function tips(){
+            alert("Successfully Withdraw");
+          }
+        </script>
+      {% endfor %}
+    </div>
+      <script>
+        $('#chooseImage').on('change',function(){
+          var src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+          $('#cropedBigImg').attr('src',src);
+          $('#create_btn').attr('disabled', false);
+        });
+    </script>
+  </main>
+{% endblock %}
+
+
+
+

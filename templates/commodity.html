@@ -1,0 +1,81 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+  <main class="container col-lg-8" role="main">
+    <div class="p-3 my-3 border rounded shadow-sm">
+      {% for commodity in commodities %}
+        <div class="px-3 mb-3 border rounded shadow-sm">
+          <div class="pt-3 d-flex flex-row">
+            <a class="card my-auto mr-2" href="/admin/detail/?id={{ commodity.commodities_ID }}">
+              <img src="/static/picture/{{ commodity.commodities_ID }}.jpg" alt="Commodity Picture" width="200" height="200">
+            </a>
+            <ul class="list-group d-flex flex-fill my-auto">
+              <li class="list-group-item d-flex justify-content-between">
+                <span>ID:</span>
+                <span>{{ commodity.commodities_ID }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Name:</span>
+                <span>{{ commodity.name }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Seller:</span>
+                <span>{{ commodity.seller_ID }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Inventory:</span>
+                <span>{{ commodity.inventory }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Price:</span>
+                <span>${{ commodity.price }}</span>
+              </li>
+            </ul>
+          </div>
+          <ul class="list-group my-2">
+            <li class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <p class="my-auto">Description</p>
+                <input class="form-control" id="ID{{commodity.commodities_ID}}" value="{{commodity.commodities_ID}}" style="display:none;">
+                <button type="button" class="btn btn-primary" onclick="delete_{{commodity.commodities_ID}}()">Delete</button>
+              </div>
+            </li>
+            <li class="list-group-item">{{ commodity.description }}</li>
+          </ul>
+        </div>
+        <script>
+          function delete_{{commodity.commodities_ID}}(){
+            var commodity_id = $("#ID{{commodity.commodities_ID}}").val();
+            $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: '/admin/commodities/',
+              contentType: "application/json",
+              data:JSON.stringify({
+                "signal": 1,
+                "id": commodity_id
+              }),
+              success:function(result){
+                console.log("success send");
+                if (result.ret == 0){
+                  alert("删除成功");
+                  window.location.href = "/admin/commodities/";
+                }
+                else{
+                  alert("Error!");
+                }
+              }
+            })
+          }
+        </script>
+      {% endfor %}
+    </div>
+      <script>
+        $('#chooseImage').on('change',function(){
+          var src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+          $('#cropedBigImg').attr('src',src);
+          $('#create_btn').attr('disabled', false);
+        });
+    </script>
+
+  </main>
+{% endblock %}

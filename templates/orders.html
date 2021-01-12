@@ -1,0 +1,93 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+   <main class="container col-lg-8" role="main">
+    <div class="p-3 my-3 border rounded shadow-sm">
+      {% for ord in orders %}
+        <div class="pt-3 px-3 mb-3 border rounded shadow-sm">
+          <div class="row border-bottom border-gray d-flex justify-content-between">
+            <h5 class="pb-3 mb-0 col-sm-6 ">OrderID: {{ ord.order_ID }}</h5>
+            <h5 class="pb-3 mb-0 col-sm-6 text-right">{{ ord.time }}</h5>
+          </div>
+
+          <div class="pt-3 px-3 row d-flex">
+            <a href="/admin/detail/?id={{ord.commodities_ID}}" class="my-auto">
+              <div class="card">
+                <img src="/static/picture/{{ord.commodities_ID}}.jpg" alt="Commodity Pic" width="200" height="200">
+              </div>
+            </a>
+            <div class="d-flex flex-column flex-fill px-2">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>ID:</span>
+                  <span>{{ ord.commodities_ID }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>Name:</span>
+                  <span>{{ ord.name }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>Buyer:</span>
+                  <span>{{ ord.buyer_ID }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>Seller:</span>
+                  <span>{{ ord.seller_ID }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>Price:</span>
+                  <strong>${{ ord.price }}</strong>
+                </li>
+              </ul>
+              {%  if view == 'buyer' %}
+                {% if ord.state == False %}
+                  <form class="p-1 d-flex justify-content-between my-2" id="loginForm">
+                    <input class="form-control col-sm-9" id="comment{{ord.order_ID}}" placeholder="Make some comments~">
+                    <input class="form-control" id="order_ID{{ord.order_ID}}" value="{{ord.order_ID}}" style="display:none;">
+                    <button type="button" class="btn btn-primary" onclick="confirm_{{ord.order_ID}}()">Confirm</button>
+                  </form>
+                {% else %}
+                  <span class="p-1 my-2 text-right">
+                    <span class="my-auto">Already Confirmed</span>
+                  </span>
+                {% endif %}
+              {% else %}
+                <br>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <script>
+          function confirm_{{ord.order_ID}}(){
+            var order_ID = $("#order_ID{{ord.order_ID}}").val();
+            var comment = $("#comment{{ord.order_ID}}").val();
+            if(comment.length==0)
+              comment = "You must comment before confirm";
+              $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/home/order/',
+                contentType: "application/json",
+                data:JSON.stringify({
+                  "data":
+                  {
+                    "id": order_ID,
+                    "comment": comment,
+                    "signal": 0
+                  }
+                }),
+                success:function(result){
+                  if (result.ret == 0){
+                      alert("Successfully Confirmed");
+                      window.location.href = "/home/order/?view=buyer";
+                  }
+                  else{
+                      alert("Error!");
+                  }
+                }
+              })
+          }
+        </script>
+      {% endfor %}
+    </div>
+  </main>
+{% endblock %}

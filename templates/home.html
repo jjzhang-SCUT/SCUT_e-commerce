@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      {% for commodity in commodities %}
+      <div class="col-md-4 col-sm-6">
+        <br>
+        <div class="card" style="width: 18rem;">
+          <img src="/static/picture/{{commodity.commodities_ID}}.jpg" alt="..." width="286" height="286">
+          <div class="card-body">
+            <h5 class="card-title" style="float:left">{{commodity.name}}</h5>
+            <h5 class="card-title" style="float:right">${{commodity.price}}</h5>
+            <br><br>
+            <a href="/home/detail/?id={{commodity.commodities_ID}}">
+              <button style="float:left;" type="button" class="btn btn-primary">Detail</button>
+            </a>
+            <a href="/home/purchase/?id={{commodity.commodities_ID}}">
+              <button style="float:right;" type="button" class="btn btn-primary">Purchase</button>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
